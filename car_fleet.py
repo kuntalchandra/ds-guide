@@ -55,7 +55,7 @@ class Solution:
         fleet = 1
         arrival_time, _ = cars[0]
 
-        # If arrival time is greater, then consider it's a fleet
+        # If arrival time is lesser, then consider it's a fleet
         for i in range(1, len(cars)):
             if cars[i][0] > arrival_time:
                 fleet += 1
