@@ -36,6 +36,8 @@ Input: fruits = [3,3,3,1,2,1,1,2,3,3,4]
 Output: 5
 Explanation: We can pick from trees [1,2,1,1,2].
 Time complexity: O(n)
+
+Note: Check the implementation of longest substring with k distinct char
 """
 from collections import defaultdict
 from unittest import TestCase
