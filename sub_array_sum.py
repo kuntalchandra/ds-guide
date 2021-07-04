@@ -12,14 +12,18 @@ from unittest import TestCase
 
 class Solution:
     def subarraySum(self, nums: List[int], k: int) -> int:
-        c_sum = dict()
-        c_sum[0] = 1
-        counter = 0
-        sum_ = 0
-        for i in nums:
-            sum_ += i
-            counter += c_sum.get(sum_ - k, 0)
-            c_sum[sum_] = c_sum.get(sum_, 0) + 1
+        c_sum = {0: 1}
+        counter, curr_sum = 0, 0
+        for num in nums:
+            curr_sum += num
+            diff = curr_sum - k
+            if diff in c_sum:
+                counter += c_sum[diff]
+
+            if curr_sum in c_sum:
+                c_sum[curr_sum] += 1
+            else:
+                c_sum[curr_sum] = 1
         return counter
 
 
