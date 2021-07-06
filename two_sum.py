@@ -1,7 +1,6 @@
 """
-Find the indices of 2 numbers which add up t k. What if the input is sorted?
-Time complexity: O(n)
-Space complexity: O(n), O(1)
+Find the indices of 2 numbers which add up t k.
+Followup: What if the input is sorted?
 """
 from collections import defaultdict
 from typing import List
@@ -10,29 +9,44 @@ from unittest import TestCase
 
 class Solution:
     def two_sum(self, nums: List[int], target: int) -> List[int]:
+        """
+        Approach: One pass hash table
+        Time complexity : O(n). We traverse the list containing nn elements only once. Each look up in the table costs
+        only O(1) time.
+        Space complexity : O(n). The extra space required depends on the number of items stored in the hash table,
+        which stores at most n elements.
+        """
         if not nums:
             return []
 
-        hashmap = defaultdict()
-        for i in range(len(nums)):
+        maps = {}
+        length = len(nums)
+        for i in range(length):
             current = nums[i]
-            if current in hashmap:
-                return [hashmap[current], i]
-            hashmap[target - current] = i
+            diff = target - current
+            if current in maps:
+                return [maps[current], i]
+            maps[diff] = i
         return []
 
     def two_sum_sorted(self, numbers: List[int], target: int) -> List[int]:
+        """
+        2 Sum II. Return the indices of the two numbers (1-indexed)
+        Time complexity : O(n). Each of the n elements is visited at most once, thus the time complexity is O(n).
+        Space complexity : O(1). We only use two indexes, the space complexity is O(1)
+        """
         if not numbers:
             return []
-        left = 0
-        right = len(numbers) - 1
+        length = len(numbers)
+        left, right = 0, length - 1
         while left < right:
-            if numbers[left] + numbers[right] == target:
-                return [left, right]
-            elif numbers[left] + numbers[right] > target:
-                right -= 1
-            else:
+            total = numbers[left] + numbers[right]
+            if total == target:
+                return [left + 1, right + 1]
+            elif total < target:
                 left += 1
+            else:
+                right -= 1
         return []
 
 
