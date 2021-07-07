@@ -32,15 +32,16 @@ class Solution:
         """
         Time complexity: O(n^3)
         """
-        m = ""
-        for i in range(len(s)):  # i = start, O(n)
-            for j in range(len(s), i, -1):  # j = end, O = n^2
-                if len(m) >= j - i:
+        length = len(s)
+        max_s = ""
+        for left in range(length):  # O(n)
+            for right in range(length, left, -1):   # O(n)
+                if right - left < len(max_s):
                     break
-                elif s[i:j] == s[i:j][::-1]:  # O(n)
-                    m = s[i:j]
+                if s[left:right] == s[left:right][::-1]:    # O(n)
+                    max_s = s[left:right]
                     break
-        return m
+        return max_s
 
 
 class TestLongestPalindrome(TestCase):
