@@ -22,8 +22,8 @@ class Solution:
         if not intervals:
             return 0
         intervals = sorted(intervals, key=lambda n: n[0])  # By start time
-        rooms = []
-        heappush(rooms, intervals[0][1])  # Default need
+        rooms = [intervals[0][1]]   # Default need
+        
         for i in range(1, len(intervals)):
             start, end = intervals[i]
             if start >= rooms[0]:  # 1 room got free, reuse

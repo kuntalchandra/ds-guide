@@ -18,7 +18,7 @@ class Solution:
         if not intervals:
             return True
         intervals = sorted(intervals, key=lambda n: n[0])
-        start, end = intervals[0][0], intervals[0][1]
+        start, end = intervals[0]
         for idx in range(1, len(intervals)):
             next_start, next_end = intervals[idx]
             if end > next_start:
