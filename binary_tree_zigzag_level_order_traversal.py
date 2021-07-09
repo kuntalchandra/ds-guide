@@ -6,6 +6,13 @@ right, then right to left for the next level and alternate between).
 
 Example 1:
 Input: root = [3,9,20,null,null,15,7]
+
+    3
+   / \
+  9  20
+    /  \
+   15   7
+
 Output: [[3],[20,9],[15,7]]
 
 Example 2:

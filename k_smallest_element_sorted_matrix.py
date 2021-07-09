@@ -35,6 +35,14 @@ class Solution:
         return arr[k-1]
 
     def kthSmallest(self, matrix: List[List[int]], k: int) -> int:
+        """
+        Time Complexity: let X=min(K,N);X+Klog(X)
+        The heap construction takes O(X) time. After that, performing K iterations and each iteration has two
+        operations. Extract the minimum element from a heap containing X elements. Then add a new element to the heap.
+        Both operations will take O(log(X)) time.
+        Thus, the total time complexity comes down to be O(X+Klog(X)) where X is min(K,N).
+        Space Complexity: O(X) which is occupied by the heap.
+        """
         length = len(matrix)
         heap = []
 
