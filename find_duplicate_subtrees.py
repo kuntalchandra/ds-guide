@@ -10,6 +10,14 @@ Two trees are duplicate if they have the same structure with the same node value
 Input: root = [1,2,3,4,null,2,4,null,null,4]
 Output: [[2,4],[4]]
 
+            1
+           / \
+         2    3
+        /    / \
+       4    2   4
+           /
+          4
+
 Input: root = [2,1,1]
 Output: [[1]]
 
