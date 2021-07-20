@@ -28,7 +28,10 @@ Input: piles = [30,11,23,4,20], h = 6
 Output: 23
 
 Approach:
+With piles = [3, 6, 7, 11] and H = 8, there is some X = 4 so that possible(1) = possible(2) = possible(3) = False, and
+possible(4) = possible(5) = ... = True
 Binary search in [1, max(piles)] to find the k.
+Binary search on the values of possible(K) to find the first X such that possible(X) is True, that will be the answer.
 Time complexity: O(NlogM)
 """
 from math import ceil
@@ -36,7 +39,23 @@ from math import ceil
 from typing import List
 
 
-class Solution:
+class Solution(object):
+    def minEatingSpeed(self, piles, H):
+        # Can Koko eat all bananas in H hours with eating speed K?
+        def possible(K):
+            return sum((p-1) / K + 1 for p in piles) <= H
+
+        lo, hi = 1, max(piles)
+        while lo < hi:
+            mi = (lo + hi) / 2
+            if not possible(mi):
+                lo = mi + 1
+            else:
+                hi = mi
+        return lo
+
+
+class Solution1:
     def minEatingSpeed(self, piles: List[int], h: int) -> int:
         low, high = 1, max(piles)
         while low < high:
