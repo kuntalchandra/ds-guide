@@ -23,10 +23,12 @@ Output: [1]
 
 
 # Definition for singly-linked list.
-# class ListNode:
-#     def __init__(self, val=0, next=None):
-#         self.val = val
-#         self.next = next
+class ListNode:
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
+
+
 class Solution:
     def removeNthFromEnd1(self, head: ListNode, n: int) -> ListNode:
         """
@@ -71,3 +73,15 @@ class Solution:
             return head.next
         first.next = first.next.next
         return head
+
+    def remove_node_without_head_pointer(self, node: ListNode) -> None:
+        """
+        Delete given node from the list where you don't have the head pointer
+        """
+        # last node can't be deleted without head pointer
+        if not node.next:
+            return
+        # copy value of the next node
+        node.val = node.next.val
+        # perform the delete
+        node.next = node.next.next
