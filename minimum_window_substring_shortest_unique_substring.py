@@ -19,6 +19,21 @@ The solution is pretty intuitive. We keep expanding the window by moving the rig
 desired characters, we contract (if possible) and save the smallest window till now.
 Time complexity: O(n)
 Space complexity: O(n)
+
+Similar Variation:
+
+Smallest Substring of All Characters
+Given an array of unique characters arr and a string str, Implement a function getShortestUniqueSubstring that finds
+the smallest substring of str containing all the characters in arr. Return "" (empty string) if such a substring
+does not exist.
+
+Come up with an asymptotically optimal solution and analyze the time and space complexities.
+
+Example:
+
+input:  arr = ['x','y','z'], str = "xyyzyzyx"
+
+output: "zyx"
 """
 from collections import Counter
 from unittest import TestCase
@@ -58,6 +73,48 @@ class Solution:
             return ""
         else:
             return s[left:right]
+
+
+def get_shortest_unique_substring(arr, source_str):
+    start, end, length, unique_count = 0, 0, len(source_str), 0
+    res = ""
+    # count map
+    count_map = {c: 0 for c in arr}
+
+    # build the sub_str until it contains all unique char from array
+    for end in range(length):  # 0, 1, 2, 3, 4, 5, 6, 7
+        # handle the new end
+        end_c = source_str[end]  # x, y, y, z, y, z, y, x
+
+        # skip current char if not in count map
+        if end_c not in count_map:
+            continue
+
+        if count_map[end_c] == 0:
+            unique_count += 1  # 1, 2, 3, 3
+        count_map[end_c] += 1  # {x: 1, y: 1, y: 2, z: 1, y: 3, z: 2, y: 4, x: 1}
+
+        while unique_count == len(arr):  # 3 == 3, 2 != 3, 3 == 3
+            temp_length = (end - start) + 1  # 4, 6
+
+            # it can't be shorter than this
+            if temp_length == len(arr):
+                return source_str[start: end + 1]
+
+            # keep building a valid substring which meets the requirement till now
+            if not res or temp_length < len(res):
+                # found sub_str till now
+                res = source_str[start: end + 1]  # xyyz,
+
+            start_c = source_str[start]  # x, y
+            if start_c in count_map:
+                start_count = count_map[start_c] - 1  # 0, 4
+                if start_count == 0:
+                    unique_count -= 1  # 2
+                count_map[start_c] = start_count  # {x: 0}
+
+            start += 1  # 1
+    return res
 
 
 class TestMinWindow(TestCase):
