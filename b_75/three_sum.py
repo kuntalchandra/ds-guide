@@ -20,6 +20,10 @@ Example 3:
 
 Input: nums = [0]
 Output: []
+
+Time Complexity: O(n^2). two Sum O(n). Sorting the array takes O(nlogn), so overall complexity is O(nlogn+n^2).
+This is asymptotically equivalent to O(n^2).
+Space Complexity: O(n)
 """
 
 
