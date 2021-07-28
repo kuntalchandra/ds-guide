@@ -1,4 +1,6 @@
 """
+Verify Alien Dictionary
+
 In an alien language, surprisingly they also use english lowercase letters, but possibly in a different order. The order
 of the alphabet is some permutation of lowercase letters.
 Given a sequence of words written in the alien language, and the order of the alphabet, return true if and only if the
@@ -29,8 +31,8 @@ before another; in this application, a topological ordering is just a valid sequ
 ordering is possible if and only if the graph has no directed cycles, that is, if it is a directed acyclic graph (DAG).
 Any DAG has at least one topological ordering, and algorithms are known for constructing a topological ordering of any
 DAG in linear time.
-Complexity AnalysisTime Complexity: O(C), where C is the total content of words.
-Space Complexity: O(1)
+Complexity AnalysisTime Complexity: O(C), where C is the total content of words.
+Space Complexity: O(1)
 """
 from typing import List
 from unittest import TestCase
