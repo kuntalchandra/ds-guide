@@ -15,6 +15,30 @@ class TreeNode:
         self.right = None
 
 
+class Solution:
+    """
+    Additional space
+    """
+    def isValidBST(self, root: TreeNode) -> bool:
+        if not root:
+            return True
+        arr = list()
+        arr = self.in_order(root, arr)
+        if len(set(arr)) != len(arr):
+            return False
+        copied_arr = arr[:]
+        copied_arr.sort()
+        return copied_arr == arr
+
+    def in_order(self, node: TreeNode, arr: list) -> list:
+        if not node:
+            return
+        self.in_order(node.left, arr)
+        arr.append(node.val)
+        self.in_order(node.right, arr)
+        return arr
+
+
 def is_valid_bst(root: TreeNode) -> bool:
     return bst_helper(root, float("-inf"), float("inf"))
 
