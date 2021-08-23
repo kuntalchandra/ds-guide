@@ -35,3 +35,59 @@ class Solution:
                 return [maps[current], i]
             maps[diff] = i
         return
+
+
+"""
+Two Sum IV - Input is a BST
+
+Given the root of a Binary Search Tree and a target number k, return true if there exist two elements in the BST such 
+that their sum is equal to the given target.
+
+ 
+
+Example 1:
+
+
+Input: root = [5,3,6,2,4,null,7], k = 9
+Output: true
+Example 2:
+
+
+Input: root = [5,3,6,2,4,null,7], k = 28
+Output: false
+Example 3:
+
+Input: root = [2,1,3], k = 4
+Output: true
+Example 4:
+
+Input: root = [2,1,3], k = 1
+Output: false
+Example 5:
+
+Input: root = [2,1,3], k = 3
+Output: true
+
+"""
+
+
+class Solution1:
+    def findTarget(self, root: Optional[TreeNode], k: int) -> bool:
+        arr = self.inorder(root, [])
+        left, right = 0, len(arr) - 1
+        while left < right:
+            total = arr[left] + arr[right]
+            if total == k:
+                return True
+            if total < k:
+                left += 1
+            else:
+                right -= 1
+        return False
+
+    def inorder(self, node: TreeNode, arr: List[int]) -> List[int]:
+        if node:
+            self.inorder(node.left, arr)
+            arr.append(node.val)
+            self.inorder(node.right, arr)
+        return arr
