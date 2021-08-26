@@ -24,6 +24,14 @@ Explanation: There are a total of 2 courses to take.
 To take course 1 you should have finished course 0, and to take course 0 you should also have finished course 1. So it
 is impossible.
 
+
+
+Time Complexity: O(∣E∣+∣V|^2) where |E| is the number of dependencies, ∣V∣ is the number of courses and d is the
+maximum length of acyclic paths in the graph
+Space Complexity: O(∣E∣+∣V∣)
+
+Optimisation: Instead of backtracking, if we have used Postorder DFS backtracking or topological sorting approach then
+time complexity gets reduced to O(∣E∣+∣V∣)
 """
 from collections import defaultdict
 from typing import Dict, List

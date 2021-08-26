@@ -37,19 +37,20 @@ class Solution:
         graph (O(E)), plus the size of the other objects used O(N)
         """
         graph = defaultdict(list)
-        for edge, vertex, time in times:
-            graph[edge].append((vertex, time))
+        for node, neighbor, distance in times:
+            graph[node].append([distance, neighbor])
 
-        q = [(0, k)]
+        heap = [(0, k)]
         seen = {}
-        while q:
-            distance, node = heappop(q)
+        while heap:
+            distance, node = heappop(heap)
+            # no need to send signal to the visited node
             if node in seen:
                 continue
             seen[node] = distance
-            for neighbor, required_distance in graph[node]:
-                # push only neighbor is not there
+            for required_distance, neighbor in graph[node]:
+                # push only if neighbor is not visited
                 if neighbor not in seen:
-                    heappush(q, (distance + required_distance, neighbor))
+                    heappush(heap, (distance + required_distance, neighbor))
 
         return max(seen.values()) if len(seen) == n else -1

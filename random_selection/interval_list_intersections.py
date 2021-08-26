@@ -40,6 +40,7 @@ class Solution:
             high = min(firstList[i][1], secondList[j][1])
             if low <= high:
                 res.append([low, high])
+            # cross the interval with the smallest endpoint
             if firstList[i][1] < secondList[j][1]:
                 i += 1
             else:
