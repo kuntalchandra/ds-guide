@@ -41,7 +41,7 @@ class Solution:
 
         while q:
             temp = []
-            for i in range(len(q)):
+            for _ in range(len(q)):
                 node = q.popleft()
                 temp.append(node.val)
                 if node.left:
@@ -94,7 +94,7 @@ class Solution:
 
         while q:
             temp = []
-            for i in range(len(q)):
+            for _ in range(len(q)):
                 node = q.popleft()
                 temp.append(node.val)
                 if node.children:
