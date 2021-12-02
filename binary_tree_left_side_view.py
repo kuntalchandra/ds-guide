@@ -21,6 +21,11 @@ Example
           / \    /
          4   7  13
 output = 4
+            8  <------ root
+             \
+             10
+              \
+                14
 """
 from collections import deque
 

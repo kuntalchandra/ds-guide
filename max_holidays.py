@@ -15,7 +15,7 @@ maximum length of vacation an employee can take.
 Example 1:
 Input: year = [False, True, False, True, False, True, False], pto: 2
 Output: 5
-Explanation: Taking off on year[2] and year[5] provides the longest vacation window of consecutive 5 days.
+Explanation: Taking off on year[2] and year[4] provides the longest vacation window of consecutive 5 days.
 
 Example 2:
 Input: year = [False, True, False], pto = 1

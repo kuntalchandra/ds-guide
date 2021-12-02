@@ -13,13 +13,11 @@ Take for example the tree below:
             /   |    \
            5    3     6
         /      / \   /\
-       4      3   0 1  5
+       4      2   0 1  5
             /    /
-           2    10
+           1    10
           /
         1
-        \
-         1
 
 A path from Honda’s factory to a car dealership, which is a path from the root to a leaf in the tree, is called a
 Sales Path. The cost of a Sales Path is the sum of the costs for every node in the path. For example, in the tree
