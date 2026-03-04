@@ -22,6 +22,24 @@ Example 3:
 
 Input: nums = [3,3], target = 6
 Output: [0,1]
+
+Approach:
+For every number x, ask: have I seen (target - x) before? Store each value→index in a map as you scan.
+
+seen = {}
+for i, current in enumerate(nums):
+    diff = target - current
+    if diff in seen:
+        return [seen[diff], i]
+seen[current] = i
+
+Triggers:
+- find pair summing to K
+- O(n) lookup required
+- single pass over array
+Variants / Watch-outs:
+- BST variant: in-order traversal then two-pointer on sorted array
+- Multiple pairs → collect all, be careful about duplicate indices
 """
 
 
