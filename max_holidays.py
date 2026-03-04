@@ -38,6 +38,29 @@ Once get a window which has more than the allowed number of 0's, move the left p
 0 on the left too. This step ensures to throw out the extra zero.
 
 Visual credit: https://leetcode.com/problems/max-consecutive-ones-iii/discuss/719833/python3-sliding-window-with-clear-example-explains-why-the-soln-works
+
+Detailed mental model:
+"How do I find the longest subarray where the count of 'bad' elements ≤ k?"
+
+That single sentence covers this entire problem family. In your case:
+
+"bad element" = False (workday you must use PTO for)
+k = pto
+
+def sliding_window_longest(arr, k):
+    left = 0
+    cost = 0  # tracks "bad" elements in window
+
+    for right in range(len(arr)):
+        if is_bad(arr[right]):
+            cost += 1
+
+        if cost > k:                    # window invalid
+            if is_bad(arr[left]):       # refund if left was bad
+                cost -= 1
+            left += 1                   # always slide left by 1
+
+    return right - left + 1            # window never shrinks = max size
 """
 from typing import List
 from unittest import TestCase
