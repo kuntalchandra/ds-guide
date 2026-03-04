@@ -3,14 +3,14 @@ Car Fleet
 
 N cars are going to the same destination along a one lane road.  The destination is target miles away.
 
-Each car i has a constant speed speed[i] (in miles per hour), and initial position position[i] miles towards the
+Each car i has a constant speed[i] (in miles per hour), and initial position[i] miles towards the
 target along the road.
 
 A car can never pass another car ahead of it, but it can catch up to it, and drive bumper to bumper at the same speed.
 
 The distance between these two cars is ignored - they are assumed to have the same position.
 
-A car fleet is some non-empty set of cars driving at the same position and same speed.  Note that a single car is also
+A car fleet is some non-empty set of cars driving at the same position and same speed. Note that a single car is also
 a car fleet.
 
 If a car catches up to a car fleet right at the destination point, it will still be considered as one car fleet.
@@ -34,6 +34,32 @@ Note that no other cars meet these fleets before the destination, so the answer 
 O(NlogN) To sort the cars by position
 O(N) One pass for all cars
 O(N) Space for sorted cars. O(1) space is possible if we sort pos in-place.
+
+Approach:
+Sort by position descending (closest to target first).
+Compute each car's time_to_target. Use a stack.
+If current car's time <= stack top, it catches up and merges — don't push.
+If it takes longer, it's a new fleet behind the one ahead — push it.
+Stack size = number of fleets.
+
+cars = sorted(zip(position, speed), reverse=True)
+stack = []
+for pos, spd in cars:
+    time = (target - pos) / spd
+    if not stack or time > stack[-1]:
+        stack.append(time)      # new fleet
+    # else: merges into fleet ahead, nothing to do
+
+return len(stack)
+
+Triggers:
+- cars/people converging toward a common endpoint
+- "how many groups form" after merging
+- monotonic stack where merge = don't push
+
+Variants / Watch-outs:
+- Reverse sort is the mandatory setup — without it you can't use a simple stack
+- A faster car behind a slower car ALWAYS merges — it can never overtake
 """
 from typing import List
 

@@ -40,27 +40,31 @@ Once get a window which has more than the allowed number of 0's, move the left p
 Visual credit: https://leetcode.com/problems/max-consecutive-ones-iii/discuss/719833/python3-sliding-window-with-clear-example-explains-why-the-soln-works
 
 Detailed mental model:
-"How do I find the longest subarray where the count of 'bad' elements ≤ k?"
+"Longest window where count of bad elements ≤ k" — one sentence covers this whole family.
+Expand right freely. When window becomes invalid, slide left by exactly 1
+(never a full shrink) — window only ever stays same or grows, so final size is the answer.
 
-That single sentence covers this entire problem family. In your case:
+left = 0
+cost = 0
 
-"bad element" = False (workday you must use PTO for)
-k = pto
+for right in range(len(arr)):
+    if is_bad(arr[right]):
+        cost += 1
+    if cost > k:                        # window invalid
+        if is_bad(arr[left]):           # only refund if left was a bad element
+            cost -= 1
+        left += 1                       # slide by exactly 1, not full shrink
 
-def sliding_window_longest(arr, k):
-    left = 0
-    cost = 0  # tracks "bad" elements in window
+return right - left + 1
 
-    for right in range(len(arr)):
-        if is_bad(arr[right]):
-            cost += 1
+Triggers:
+- longest subarray/substring with at most k violations
+- flip at most k zeros, use at most k replacements
+- window size only ever stays same or grows (monotonically non-decreasing)
 
-        if cost > k:                    # window invalid
-            if is_bad(arr[left]):       # refund if left was bad
-                cost -= 1
-            left += 1                   # always slide left by 1
-
-    return right - left + 1            # window never shrinks = max size
+Variants / Watch-outs:
+- Longest Substring with at most k Distinct: cost = len(char_count_map) > k
+- Minimum Window Substring: shrink aggressively (not by 1), track minimum size
 """
 from typing import List
 from unittest import TestCase

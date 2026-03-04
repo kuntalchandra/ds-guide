@@ -21,6 +21,30 @@ Explanation: Your function can return either index number 1 where the peak eleme
 peak element is 6.
 
 Follow up: You must write an algorithm that runs in O(log n) time.
+
+Approach:
+Binary search on an unsorted array — valid because you need ANY peak, not THE peak.
+At mid, compare with mid+1. If going uphill to the right, a peak must exist right.
+If downhill, a peak exists left (or mid itself is it).
+You always move toward higher ground, guaranteed to land on a peak.
+
+low, high = 0, len(nums) - 1
+while low < high:
+    mid = (low + high) // 2
+    if nums[mid] < nums[mid + 1]:
+        low = mid + 1       # uphill → peak is to the right
+    else:
+        high = mid          # downhill → peak is mid or to the left
+return low
+
+Triggers:
+- "find any peak" (not global max)
+- array with local structure, not globally sorted
+- O(log n) required on non-sorted input
+
+Variants / Watch-outs:
+- 2D peak: apply same binary search logic row then column
+- Never compare nums[mid - 1] — mid could be 0, causing index error
 """
 from typing import List
 
