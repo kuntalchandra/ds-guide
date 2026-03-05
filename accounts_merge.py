@@ -38,6 +38,43 @@ Output: [["Ethan","Ethan0@m.co","Ethan4@m.co","Ethan5@m.co"],["Gabe","Gabe0@m.co
 Time Complexity: O(∑ ai logai), where a_i is the length of accounts[i]. Without the log factor, this is the complexity
 to build the graph and search for each component. The log factor is for sorting each component at the end.
 Space Complexity: O(∑ai), the space used by the graph and search.
+
+Approach:
+"Same account" = "connected component of emails."
+Union-Find: each email is a node. For each account, union all its emails
+under the first email as representative. After all unions, group emails
+by their root, attach account name, sort each group.
+
+parent = {}
+def find(x):
+    parent.setdefault(x, x)
+    if parent[x] != x: parent[x] = find(parent[x])
+    return parent[x]
+
+def union(x, y):
+    parent[find(x)] = find(y)
+
+for name, *emails in accounts:
+    for email in emails:
+        union(emails[0], email)
+
+groups = defaultdict(list)
+email_to_name = {}
+for name, *emails in accounts:
+    for email in emails:
+        groups[find(email)].append(email)
+        email_to_name[find(email)] = name
+
+return [[email_to_name[root]] + sorted(set(emails)) for root, emails in groups.items()]
+
+Triggers:
+- merge overlapping groups by shared key
+- "same person if they share any email"
+- incremental connectivity building
+
+Variants / Watch-outs:
+- DFS also works: build email→accounts adjacency, DFS to collect connected emails
+- Sort emails AFTER merging, not before — otherwise you miss cross-account duplicates
 """
 from typing import List
 from collections import defaultdict

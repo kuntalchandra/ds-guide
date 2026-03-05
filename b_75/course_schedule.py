@@ -13,7 +13,36 @@ Input: numCourses = 2, prerequisites = [[1,0],[0,1]]
 Output: false
 Explanation: There are a total of 2 courses to take. To take course 1 you should have finished course 0, and to take
 course 0 you should also have finished course 1. So it is impossible.
-Approach: DFS Cyce detection. Refer to Topological sorting.
+Approach: DFS Cycle detection. Refer to Topological sorting.
+
+Approach:
+Directed graph DFS with 3-state coloring.
+0 = unvisited, 1 = currently in this DFS path, 2 = fully processed.
+Stepping into a node with state 1 = back edge = cycle = impossible.
+For Course Schedule II: append to result when marking a node 2 (post-order)
+— that naturally gives reverse topological order.
+
+state = [0] * num_courses
+order = []
+
+def dfs(node):
+    if state[node] == 1: return False   # cycle detected
+    if state[node] == 2: return True    # already processed, safe
+    state[node] = 1
+    for neighbor in graph[node]:
+        if not dfs(neighbor): return False
+    state[node] = 2
+    order.append(node)                  # post-order = reverse topo order
+    return True
+
+Triggers:
+- task dependencies / course prerequisites
+- detect circular dependency in directed graph
+- topological ordering of tasks
+
+Variants / Watch-outs:
+- Kahn's BFS alternative: track in-degrees, repeatedly peel 0-in-degree nodes
+- For Course II result is built in reverse — reverse at end, or use deque with appendleft
 """
 from collections import defaultdict
 from typing import Dict, List

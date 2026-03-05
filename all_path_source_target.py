@@ -20,6 +20,34 @@ You can print different paths in any order, but you should keep the order of nod
 
 
 There are 2^(N-2) paths and (N+2)*2^(N-3) nodes in all paths. We can roughly say O(2^N).
+
+
+Approach:
+DFS + backtracking on a DAG. No visited set needed (DAG = no cycles).
+Add node to path, recurse into all neighbors, when you hit target
+save a copy of path, then pop current node before trying next neighbor.
+
+result = []
+
+def dfs(node, path):
+    if node == target:
+        result.append(path[:])      # save a COPY
+        return
+    for neighbor in graph[node]:
+        path.append(neighbor)
+        dfs(neighbor, path)
+        path.pop()                  # backtrack
+
+dfs(0, [0])
+
+Triggers:
+- enumerate ALL paths (not just shortest)
+- input is a DAG (problem guarantees no cycles)
+- you need the actual paths, not just counts
+
+Variants / Watch-outs:
+- General graph with cycles: add visited set, remove node from visited on backtrack
+- Only need to know IF a path exists: BFS/DFS, stop at first success
 """
 from typing import List
 
