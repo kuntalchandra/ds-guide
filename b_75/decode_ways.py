@@ -15,6 +15,32 @@ Example 2:
 Input: "226"
 Output: 3
 Explanation: It could be decoded as "BZ" (2 26), "VF" (22 6), or "BBF" (2 2 6).
+
+Approach:
+At each position: take 1 digit (valid unless it's '0') OR take 2 digits
+(valid only if the two-digit value is 10-26). Memoized recursion or iterate forward.
+'0' always kills the single-digit choice — return 0 immediately for that branch.
+
+dp = {len(s): 1}    # empty suffix = exactly 1 way
+
+for idx in range(len(s) - 1, -1, -1):
+    if s[idx] == '0':
+        dp[idx] = 0
+    else:
+        dp[idx] = dp[idx + 1]                           # take 1 digit
+        if idx + 1 < len(s) and int(s[idx:idx + 2]) <= 26:
+            dp[idx] += dp[idx + 2]                      # take 2 digits
+
+return dp[0]
+
+Triggers:
+- count decodings of a numeric string
+- at each position, 1 or 2 choices with validity constraints
+- overlapping subproblems on string suffixes
+
+Variants / Watch-outs:
+- '0' alone = 0 ways; '10' or '20' = valid 2-digit; '30' = invalid 2-digit
+- With '*' wildcard: multiply by number of valid single/double interpretations of '*'
 """
 from unittest import TestCase
 

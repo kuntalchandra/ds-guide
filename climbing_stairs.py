@@ -4,6 +4,25 @@ In how many distinct ways can you climb to the top?
 Top-down DP memoization approach
 Time complexity: O(n)
 Space complexity: O(n)
+
+
+Approach:
+Pure Fibonacci. To reach step n you arrived from n-1 (one step) or n-2 (two steps).
+ways(n) = ways(n-1) + ways(n-2). Only keep last two values — O(1) space.
+
+prev, current = 1, 1       # ways(1), ways(2)
+for _ in range(n - 1):
+    prev, current = current, prev + current
+return current
+
+Triggers:
+- "how many ways" to reach end taking 1 or 2 steps
+- any recurrence where answer = sum of last two
+- template for all "step counting" DP problems
+
+Variants / Watch-outs:
+- With k step sizes: dp[idx] = sum(dp[idx - step] for step in steps if step <= idx)
+- Min Cost Climbing Stairs: dp[idx] = cost[idx] + min(dp[idx-1], dp[idx-2])
 """
 from typing import List
 from unittest import TestCase
@@ -26,7 +45,6 @@ class Solution:
         else:
             arr[n] = self.steps(n - 1, arr) + self.steps(n - 2, arr)
             return arr[n]
-
 
 class TestClimbStairs(TestCase):
     def setUp(self) -> None:
