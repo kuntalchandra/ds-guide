@@ -16,6 +16,32 @@ Example 3:
 
 Input: temperatures = [30,60,90]
 Output: [1,1,0]
+
+Approach:
+Monotonic decreasing stack of indices — "pending questions waiting for a warmer day."
+For each day, while current temp > temp at stack top, that index has its answer.
+Pop it, compute days_waited = current_index - popped_index.
+
+stack = []          # indices of unresolved days
+result = [0] * len(temperatures)
+
+for current_idx, temp in enumerate(temperatures):
+    while stack and temperatures[stack[-1]] < temp:
+        prev_idx = stack.pop()
+        result[prev_idx] = current_idx - prev_idx
+    stack.append(current_idx)
+
+return result
+
+Triggers:
+- "next greater element" in any form
+- each element is waiting to find something larger/smaller ahead of it
+- answer for index i depends on a future element
+
+Variants / Watch-outs:
+- Next Greater Element II (circular array): iterate 2 * len(nums), use index % n
+- Largest Rectangle in Histogram: pop when current bar is shorter, compute area using popped index
+- Stack stores INDICES not values — you need the position to compute the distance
 """
 from typing import List
 from unittest import TestCase
