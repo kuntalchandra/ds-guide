@@ -14,6 +14,36 @@ budget constraint is met (i.e. sum of the N reallocated grants equals to new_bud
 Use Greedy approach
 Time complexity: O(NLogN)
 Space complexity: O(1)
+
+
+Approach:
+Sort grants ascending. Process smallest grants first — they are most likely to
+fit under the cap and take their full ask. At each step compute the fair_share
+= remaining_budget / remaining_grant_count. If current grant <= fair_share,
+give it in full and continue. The moment a grant exceeds fair_share,
+that fair_share is the cap.
+
+grants.sort()
+remaining_budget = float(budget)
+
+for idx, grant in enumerate(grants):
+    remaining_count = len(grants) - idx
+    fair_share = remaining_budget / remaining_count
+    if grant <= fair_share:
+        remaining_budget -= grant       # give this grant in full
+    else:
+        return fair_share               # cap found
+
+return fair_share
+
+Triggers:
+- distribute budget with a uniform cap
+- "find threshold where everyone gets equal share of what's left"
+- greedy works because smallest grants are handled first
+
+Variants / Watch-outs:
+- Greedy only correct because input is sorted — processing out of order breaks it
+- Return float, don't truncate
 """
 from typing import List
 from unittest import TestCase

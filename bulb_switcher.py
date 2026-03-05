@@ -33,6 +33,23 @@ At moment k (for k from 0 to n - 1), we turn on the light[k] bulb. A bulb change
 the previous bulbs (to the left) are turned on too.
 
 Return the number of moments in which all turned on bulbs are blue.
+
+
+Approach:
+Bulb i gets toggled once for each divisor of i. It ends ON iff toggled an odd number of times.
+Only perfect squares have an odd divisor count (the square root pairs with itself, not with another).
+So the answer is simply floor(sqrt(n)).
+
+return int(n ** 0.5)
+
+Triggers:
+- toggling across a range with divisor-based patterns
+- "how many end in state X after n rounds"
+- math insight replaces O(n²) simulation
+
+Variants / Watch-outs:
+- Never simulate — it's O(n²). The entire problem IS the math insight.
+- Bulb Switcher II (with multiple operations): bitmask on first 6 bulbs (pattern repeats with period 6)
 """
 from math import floor, sqrt
 from typing import List

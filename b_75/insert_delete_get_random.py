@@ -31,6 +31,43 @@ randomizedSet.remove(1); // Removes 1 from the set, returns true. Set now contai
 randomizedSet.insert(2); // 2 was already in the set, so return false.
 randomizedSet.getRandom(); // Since 2 is the only number in the set, getRandom() will always return 2.
 
+
+Approach:
+Array for O(1) random access. HashMap val→index for O(1) lookup.
+The trick for O(1) delete: swap the target element with the LAST element
+in the array, update the map for the swapped element, then pop from the end.
+No shifting needed.
+
+values = []
+index_map = {}      # value → its index in values[]
+
+def insert(val):
+    if val in index_map: return False
+    values.append(val)
+    index_map[val] = len(values) - 1
+    return True
+
+def remove(val):
+    target_idx = index_map[val]
+    last_val = values[-1]
+    values[target_idx] = last_val
+    index_map[last_val] = target_idx    # update map for moved element
+    values.pop()
+    del index_map[val]
+    return True
+
+def get_random():
+    return random.choice(values)
+
+Triggers:
+- O(1) insert + delete + random — impossible with just one data structure
+- any design problem needing O(1) across conflicting operations
+- "swap with last" delete trick
+
+Variants / Watch-outs:
+- With duplicates: index_map maps val → set of indices; pop any index from the set
+- Edge case: removing the last element — it swaps with itself, handle gracefully
+
 """
 from random import random, choice
 
