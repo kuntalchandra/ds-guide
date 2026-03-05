@@ -30,6 +30,32 @@ Example 2:
 
 Input: root = [1]
 Output: [[1]]
+
+Approach:
+A node's "layer" is its HEIGHT (distance to farthest leaf below), NOT its depth from root.
+Actual leaves have height 0. Post-order DFS: compute height bottom-up,
+insert node.val into result[height].
+
+result = []
+
+def height(node):
+    if not node: return -1
+    current_height = 1 + max(height(node.left), height(node.right))
+    if current_height == len(result):
+        result.append([])
+    result[current_height].append(node.val)
+    return current_height
+
+height(root)
+
+Triggers:
+- "remove leaves layer by layer"
+- group nodes by distance-from-bottom (not depth-from-top)
+- post-order where the return value determines which bucket a node belongs to
+
+Variants / Watch-outs:
+- Key non-obvious insight: result index = height, not depth
+- A parent's height is determined by its children's heights — must be post-order
 """
 from typing import List
 

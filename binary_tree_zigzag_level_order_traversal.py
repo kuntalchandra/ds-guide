@@ -22,6 +22,37 @@ Output: [[1]]
 Example 3:
 Input: root = []
 Output: []
+
+
+Approach:
+BFS level-order with alternating collection direction.
+Use a deque per level — appendleft when going right-to-left, append normally otherwise.
+Flip direction flag after every level.
+
+from collections import deque
+queue = deque([root])
+result = []
+left_to_right = True
+
+while queue:
+    level_size = len(queue)
+    level = deque()
+    for _ in range(level_size):
+        node = queue.popleft()
+        if left_to_right: level.append(node.val)
+        else: level.appendleft(node.val)
+        if node.left:  queue.append(node.left)
+        if node.right: queue.append(node.right)
+    result.append(list(level))
+    left_to_right = not left_to_right
+
+Triggers:
+- zigzag / spiral level order traversal
+- alternating direction per level
+- same BFS skeleton, only the collection changes
+
+Variants / Watch-outs:
+- Don't reverse the BFS queue — only flip how you BUILD each level's result list
 """
 from collections import deque
 

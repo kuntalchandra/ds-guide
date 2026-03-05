@@ -23,6 +23,31 @@ Example 2:
 Input: root = [-10,9,20,null,null,15,7]
 Output: 42
 Explanation: The optimal path is 15 -> 20 -> 7 with a path sum of 15 + 20 + 7 = 42
+
+
+Approach:
+Define gain(node) = best single arm you can offer your parent.
+At each node, evaluate the full arch through it (left_gain + node.val + right_gain)
+and update global max. Return only the best single arm upward —
+a path through the parent can only use one branch. Clip negatives to 0.
+
+self.max_sum = float('-inf')
+
+def gain(node):
+    if not node: return 0
+    left_gain  = max(0, gain(node.left))     # clip negative arms
+    right_gain = max(0, gain(node.right))
+    self.max_sum = max(self.max_sum, node.val + left_gain + right_gain)
+    return node.val + max(left_gain, right_gain)  # single arm to parent
+
+Triggers:
+- max sum path that can start and end anywhere in the tree
+- path can "bend" at one node but cannot branch
+- global answer tracked outside recursion, local return serves the parent
+
+Variants / Watch-outs:
+- Diameter of Binary Tree: same pattern, count edges (length) instead of sum
+- The return value and the global update are intentionally DIFFERENT — that's the core trick
 """
 
 
