@@ -11,6 +11,37 @@ finished one, then the corresponding room can be used by the following meeting. 
 of finished meeting. After this process, the number of elements in min heap is the result
 Time complexity: O(nLogn)
 Space complexity: O(n)
+
+
+Mental model:
+Sort by start time. Use a min-heap of end times (one entry per active room).
+For each meeting, check if the earliest-finishing room is free
+(heap top <= current start). If yes, reuse it (pop then push new end).
+If no, open a new room (just push). Heap size at end = rooms needed.
+
+intervals.sort(key=lambda interval: interval[0])
+rooms = [intervals[0][1]]   # first meeting needs a room
+
+for idx in range(1, len(intervals)):
+    current_start, current_end = intervals[idx]
+    if current_start >= rooms[0]:   # earliest room is free
+        heappop(rooms)
+    heappush(rooms, current_end)    # assign room (new or reused)
+
+return len(rooms)
+
+Time: O(n log n) — sort + n heap ops each O(log n)
+Space: O(n) — heap stores at most n end times
+
+Triggers:
+- minimum rooms / workers / machines needed
+- overlapping intervals, resource allocation
+- "how many things are running simultaneously"
+
+Variants / Watch-outs:
+- Optimisation angle: naive is tracking all active meetings O(n²) — heap reduces to O(n log n)
+- Two separate sorted arrays for starts/ends (no pairing) also works in O(n log n) and is cleaner to reason about
+- Key: pop THEN push — don't just push, or you'll count one extra room
 """
 from heapq import heappop, heappush
 from typing import List

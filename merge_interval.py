@@ -19,7 +19,7 @@ Explanation: Intervals [1,4] and [4,5] are considered overlapping.
 Similar variant of interval scheduling-
 Non-overlapping Intervals
 
-Given an array of intervals intervals where intervals[i] = [starti, endi], return the minimum number of intervals you
+Given an array of intervals where intervals[i] = [starti, endi], return the minimum number of intervals you
 need to remove to make the rest of the intervals non-overlapping.
 
 
@@ -38,6 +38,34 @@ Example 3:
 Input: intervals = [[1,2],[2,3]]
 Output: 0
 Explanation: You don't need to remove any of the intervals since they're already non-overlapping.
+
+
+Approach:
+Sort by start time. Walk linearly, comparing each interval to the
+LAST interval in the result list. If they overlap, extend the last
+interval's end. If not, append as new interval.
+
+intervals.sort(key=lambda interval: interval[0])
+result = []
+for start, end in intervals:
+    if not result or start > result[-1][1]:
+        result.append([start, end])         # no overlap, new interval
+    else:
+        result[-1][1] = max(result[-1][1], end)  # overlap, extend end
+
+Time: O(n log n)
+Space: O(n) output
+
+Triggers:
+- merge all overlapping intervals
+- reduce a set of ranges to disjoint intervals
+- preprocessing step before interval queries
+
+Variants / Watch-outs:
+- Optimisation angle: common mistake is merging eagerly without sorting first — O(n²)
+- Non-Overlapping Intervals (min removals): sort by END time (not start), greedily keep
+  intervals with earliest end — identical structure, different sort key
+- Watch: max(result[-1][1], end) not just end — current interval could be fully contained
 """
 from typing import List
 

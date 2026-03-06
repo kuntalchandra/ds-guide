@@ -9,6 +9,36 @@ The first company arrives at time 1 and stays for 2 hours. At time 3, two compan
 either 1 hour or 2 hours as the stage will be occupied. The next companies arrive at times 5 and 7 and don't conflict
 with each other. In total, there can be a maximum of 4 events scheduled.
 
+
+Mental model:
+Classic greedy: sort intervals by END time (not start).
+Always pick the event that finishes earliest — it leaves maximum room for future events.
+Track last_end; skip any event whose start conflicts with last_end.
+
+events = sorted(zip(arrival, [arrival[idx] + duration[idx] for idx in range(len(arrival))]),
+                key=lambda event: event[1])   # sort by end time
+count = 1
+last_end = events[0][1]
+
+for start, end in events[1:]:
+    if start >= last_end:       # no conflict
+        count += 1
+        last_end = end
+
+Time: O(n log n)
+Space: O(n) for building event pairs
+
+Triggers:
+- maximum non-overlapping events/tasks you can schedule
+- one resource, pick as many as possible
+- "activity selection problem"
+
+Variants / Watch-outs:
+- Optimisation angle: the repo's current solution sorts by start and counts conflicts —
+  correct but fragile; sorting by END is the canonical greedy with cleaner proof
+- Non-Overlapping Intervals (LC 435): same greedy, return n - count instead
+- Key distinction from Meeting Rooms II: here you pick events greedily; there you assign rooms
+
 Approach:
 Interval scheduling algo- sort then greedy pick up
 """
