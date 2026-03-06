@@ -16,6 +16,37 @@ Example 2:
 Input: nums = [3,2,3,1,2,4,5,5,6], k = 4
 Output: 4
 
+
+
+Approach:
+Min-heap of size k. Initialize with first k elements. For each remaining element,
+if it's larger than the heap's minimum (heap[0]), swap it in.
+After full scan, heap[0] is the kth largest.
+
+heap = nums[:k]
+heapify(heap)                   # O(k)
+
+for num in nums[k:]:            # O(n - k)
+    if num > heap[0]:
+        heappop(heap)
+        heappush(heap, num)     # O(log k)
+
+return heap[0]
+
+Time: O(k + (n-k) log k) ≈ O(n log k)
+Space: O(k)
+
+Triggers:
+- kth largest/smallest in unsorted array
+- maintain a running top-k
+- "I don't need full sort, just the boundary element"
+
+Variants / Watch-outs:
+- Optimisation angle: sort is O(n log n); heap is O(n log k); QuickSelect is O(n) average
+  — know all three, discuss tradeoffs
+- QuickSelect template: partition around pivot, recurse on one side only (like quicksort
+  but only recurse into the side containing k)
+- K Closest Points to Origin: same heap pattern, key = distance
 """
 from heapq import heappush, heappop, heapify
 from typing import List

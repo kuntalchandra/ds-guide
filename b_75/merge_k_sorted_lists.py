@@ -27,15 +27,53 @@ Example 3:
 
 Input: lists = [[]]
 Output: []
+
+
+Approach:
+Push head of each list into a min-heap as (value, list_idx, node).
+Repeatedly extract minimum, attach to result, push that node's next.
+Heap always holds at most k elements.
+
+dummy = ListNode(0)
+current = dummy
+heap = []
+
+for idx, node in enumerate(lists):
+    if node:
+        heappush(heap, (node.val, idx, node))
+
+while heap:
+    value, idx, node = heappop(heap)
+    current.next = node
+    current = current.next
+    if node.next:
+        heappush(heap, (node.next.val, idx, node.next))
+
+return dummy.next
+
+Time: O(N log k) where N = total nodes, k = number of lists
+Space: O(k) for heap
+
+Triggers:
+- merge k sorted sources
+- streaming merge from multiple feeds
+- "combine k sorted results from distributed systems"
+
+Variants / Watch-outs:
+- Optimisation angle: naive merge-two-at-a-time is O(Nk); heap is O(N log k);
+  divide-and-conquer pairwise is also O(N log k) — same complexity but no extra space
+- Use list index as tiebreaker in heap tuple to avoid comparing ListNodes
 """
 
 
-# Definition for singly-linked list.
-# class ListNode:
-#     def __init__(self, val=0, next=None):
-#         self.val = val
-#         self.next = next
+from typing import List
 from queue import PriorityQueue
+
+# Definition for singly-linked list.
+class ListNode:
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
 
 
 class Solution:
