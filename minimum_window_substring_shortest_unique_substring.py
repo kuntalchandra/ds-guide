@@ -10,10 +10,11 @@ Output: "BANC"
 Note:
 If there is no such window in S that covers all characters in T, return the empty string "".
 If there is such window, you are guaranteed that there will always be only one unique minimum window in S.
+
 Approach:
 Use a simple sliding window approach to solve this problem.
-In any sliding window based problem we have two pointers. One rightright pointer whose job is to expand the current
-window and then we have the leftleft pointer whose job is to contract a given window. At any point in time only one of
+In any sliding window based problem we have two pointers. One right pointer whose job is to expand the current
+window and then we have the left pointer whose job is to contract a given window. At any point in time only one of
 these pointers move and the other one remains fixed.
 The solution is pretty intuitive. We keep expanding the window by moving the right pointer. When the window has all the
 desired characters, we contract (if possible) and save the smallest window till now.
@@ -34,6 +35,50 @@ Example:
 input:  arr = ['x','y','z'], str = "xyyzyzyx"
 
 output: "zyx"
+
+
+Approach:
+Expand right until window contains all required chars (required_count == 0).
+Then aggressively shrink from left to find minimum valid window.
+Track (left, right) of best window seen. Unlike max-window problems,
+here you DO fully shrink — you want the MINIMUM.
+
+required = Counter(t)
+required_count = len(required)      # number of distinct chars still needed
+left = 0
+best_left, best_right = -1, -1
+
+for right, ch in enumerate(s):
+    if ch in required:
+        required[ch] -= 1
+        if required[ch] == 0:
+            required_count -= 1
+
+    while required_count == 0:      # valid window, shrink from left
+        if best_left == -1 or (right - left) < (best_right - best_left):
+            best_left, best_right = left, right
+        left_ch = s[left]
+        if left_ch in required:
+            required[left_ch] += 1
+            if required[left_ch] == 1:
+                required_count += 1
+        left += 1
+
+return s[best_left:best_right + 1] if best_left != -1 else ""
+
+Time: O(n + m) where n = len(s), m = len(t)
+Space: O(m) for required map
+
+Triggers:
+- smallest window containing all chars of T
+- shrink aggressively (not by 1) — opposite of max-window problems
+- two-pointer with a "validity counter" tracking how many distinct chars are satisfied
+
+Variants / Watch-outs:
+- Optimisation angle: naive is O(n² × m) checking all substrings; sliding window is O(n)
+- required_count tracks DISTINCT chars satisfied (not total) — avoids re-checking the full map
+- Key difference from max-window: here window shrinks as much as possible; in max-window
+  it only slides by 1
 """
 from collections import Counter
 from unittest import TestCase

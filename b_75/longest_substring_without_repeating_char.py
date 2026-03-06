@@ -28,32 +28,34 @@ Output: 0
 
 
 Approach:
-Sliding window. Valid window condition: (window_length - count_of_most_frequent_char) <= k.
-Same "window only grows" trick as max_holidays — never truly shrink, slide by 1 when invalid.
-max_freq only ever increases — you only care about beating the best window seen so far.
+Sliding window with a hashmap storing char → last seen index.
+On encountering a duplicate, jump left directly to last_seen + 1
+(not a slow shrink). This avoids iterating the shrink step character by character.
 
-char_count = {}
-max_freq = 0
+seen = {}
 left = 0
+best = 0
 
 for right, ch in enumerate(s):
-    char_count[ch] = char_count.get(ch, 0) + 1
-    max_freq = max(max_freq, char_count[ch])
+    if ch in seen and seen[ch] >= left:     # duplicate within current window
+        left = seen[ch] + 1                 # jump directly, not shrink-by-1
+    seen[ch] = right
+    best = max(best, right - left + 1)
 
-    if (right - left + 1) - max_freq > k:      # window invalid
-        char_count[s[left]] -= 1
-        left += 1                               # slide by exactly 1
+return best
 
-return right - left + 1
+Time: O(n) — each char processed at most twice (once added, once jumped past)
+Space: O(min(n, charset)) for seen map
 
 Triggers:
-- longest substring after at most k character replacements
-- "window_size - dominant_frequency <= k" is the validity condition
-- max_freq never decrements — this is intentional, tracks historical best
+- longest substring with no repeats
+- shrink window on first constraint violation
+- O(n) with direct-jump optimisation
 
 Variants / Watch-outs:
-- max_freq intentionally not decremented on shrink — the window only needs to grow
-- Same skeleton as Max Consecutive Ones III — recognizing the family is the skill
+- Optimisation angle: naive O(n²) scans for the duplicate; hashmap gives O(1) jump
+- The seen[ch] >= left check matters — a stale entry from before left is irrelevant
+- At Most K Distinct Characters: replace seen with a count map, shrink when map size > k
 
 """
 
