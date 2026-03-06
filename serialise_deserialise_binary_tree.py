@@ -41,6 +41,57 @@ Approach: BFS pre-order traversal
 
 Time complexity: O(n)
 Space complexity: O(n)
+
+
+Approach:
+BFS-based serialization (level order). Serialize: append node values
+and "None" markers to a list, join with spaces. Deserialize: split by space,
+use a queue of parent nodes, assign left and right children from the token stream.
+
+def serialize(root):
+    if not root: return ""
+    queue = deque([root])
+    tokens = []
+    while queue:
+        node = queue.popleft()
+        if not node:
+            tokens.append("None")
+            continue
+        tokens.append(str(node.val))
+        queue.extend([node.left, node.right])   # extend adds both (including None)
+    return " ".join(tokens)
+
+def deserialize(data):
+    if not data: return None
+    tokens = deque(data.split())
+    root = TreeNode(int(tokens.popleft()))
+    queue = deque([root])
+    while queue:
+        node = queue.popleft()
+        left_val = tokens.popleft()
+        right_val = tokens.popleft()
+        if left_val != "None":
+            node.left = TreeNode(int(left_val))
+            queue.append(node.left)
+        if right_val != "None":
+            node.right = TreeNode(int(right_val))
+            queue.append(node.right)
+    return root
+
+Time: O(n) serialize, O(n) deserialize
+Space: O(n) for token list and queue
+
+Triggers:
+- convert tree to/from string for storage or transmission
+- "design a codec for a tree structure"
+- BFS reconstruction — children always appear after parent in level-order
+
+Variants / Watch-outs:
+- Optimisation angle: preorder DFS serialization is simpler code but BFS is
+  more intuitive for humans reading the output
+- BST serialization is easier (no None markers needed) — but only works for BST
+- The queue in deserialize tracks parents waiting for their children — must process
+  both children before moving to next parent
 """
 from collections import deque
 
