@@ -65,6 +65,48 @@ change_map ={ *ot : hot, dot, lot
 
 Time complexity: O(num of words in the word list * length of words). In the worst case, need to traverse all the words
 in word list * each word has length of changed words
+
+
+Approach:
+BFS for shortest path. Key optimisation: instead of comparing every word to every
+other word O(n² × L), build a pattern map: each word generates L patterns
+(replace each char with '*'). Words sharing a pattern are one transformation apart.
+BFS level by level; level count = transformation steps.
+
+# Build adjacency via patterns
+pattern_map = defaultdict(list)
+for word in word_list:
+    for idx in range(len(word)):
+        pattern = word[:idx] + '*' + word[idx+1:]
+        pattern_map[pattern].append(word)
+
+queue = deque([(begin_word, 1)])
+visited = {begin_word}
+
+while queue:
+    word, distance = queue.popleft()
+    for idx in range(len(word)):
+        pattern = word[:idx] + '*' + word[idx+1:]
+        for neighbour in pattern_map[pattern]:
+            if neighbour == end_word: return distance + 1
+            if neighbour not in visited:
+                visited.add(neighbour)
+                queue.append((neighbour, distance + 1))
+return 0
+
+Time: O(n × L²) where n = words, L = word length
+Space: O(n × L) for pattern map
+
+Triggers:
+- shortest path in an implicit graph
+- transform one state to another in minimum steps
+- BFS when all edges have equal weight (each step = 1)
+
+Variants / Watch-outs:
+- Optimisation angle: current repo solution is O(n × 26 × L) per node —
+  pattern map pre-processing reduces repeated work significantly at scale
+- Bidirectional BFS: expand from both ends simultaneously, O(b^(d/2)) vs O(b^d) —
+  huge win when word list is large
 """
 from collections import deque
 from typing import List
