@@ -33,7 +33,39 @@ calendar = [[1,4]]
 This approach has been discussed in the LC official solution
 Time Complexity: O(N^2), where N is the number of events booked. For each new event, we process every previous event
 to decide whether the new event can be booked. This leads to O(N^2) complexity.
-Space Complexity: O(N)O(N), the size of the calendar
+Space Complexity: O(N), the size of the calendar
+
+
+Approach:
+Maintain two lists: bookings (single-booked) and overlaps (double-booked regions).
+On each new booking: if it hits the overlaps list → triple booking → False.
+Otherwise, compute intersection with every existing booking and record new overlaps.
+Then add to bookings.
+
+def book(start, end):
+    for overlap_start, overlap_end in self.overlaps:
+        if start < overlap_end and end > overlap_start:
+            return False                    # would cause triple booking
+    for booked_start, booked_end in self.bookings:
+        if start < booked_end and end > booked_start:
+            self.overlaps.append([max(start, booked_start),
+                                   min(end, booked_end)])
+    self.bookings.append([start, end])
+    return True
+
+Time: O(n²) total — O(n) per booking
+Space: O(n)
+
+Triggers:
+- allow double booking but prevent triple
+- layered conflict tracking
+- "k-booking" generalisation
+
+Variants / Watch-outs:
+- Optimisation angle: same bisect/sorted-structure optimisation as Calendar I applies
+- The clever insight: you don't clean up bookings into non-overlapping form —
+  overlaps list is all you need to detect the THIRD overlap
+- Overlap formula: start < other_end AND end > other_start (half-open intervals)
 """
 
 

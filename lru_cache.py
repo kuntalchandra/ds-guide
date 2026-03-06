@@ -5,6 +5,46 @@ get(key) - Get the value (will always be positive) of the key if the key exists 
 put(key, value) - Set or insert the value if the key is not already present. When the cache reached its capacity, it
 should invalidate the least recently used item before inserting a new item. Both the operations must be done in
 O(1) time complexity
+
+
+
+Approach:
+OrderedDict gives O(1) get/put/move-to-front in Python — it maintains
+insertion order and exposes move_to_end().
+On get: move accessed key to front (most recent).
+On put: if at capacity, popitem() removes from the BACK (least recent).
+Always move to front after any access.
+
+self.cache = OrderedDict()
+self.capacity = capacity
+
+def get(key):
+    if key not in self.cache: return -1
+    self.cache.move_to_end(key, last=False)   # move to front = most recent
+    return self.cache[key]
+
+def put(key, value):
+    if key in self.cache:
+        self.cache[key] = value
+    else:
+        if len(self.cache) == self.capacity:
+            self.cache.popitem()              # remove from back = least recent
+        self.cache[key] = value
+    self.cache.move_to_end(key, last=False)   # always move to front
+
+Time: O(1) for both get and put
+Space: O(capacity)
+
+Triggers:
+- O(1) get + O(1) evict-least-recently-used
+- cache with bounded size
+- "design a system that keeps the most recently used items"
+
+Variants / Watch-outs:
+- Optimisation angle: naive dict + list is O(n) for eviction; OrderedDict is O(1);
+  raw doubly-linked-list + hashmap is the explicit O(1) implementation interviewers love
+- LFU Cache: harder — need frequency buckets + OrderedDict per bucket
+- move_to_end(key, last=False) = front; last=True (default) = back — easy to mix up
 """
 from collections import OrderedDict
 from unittest import TestCase

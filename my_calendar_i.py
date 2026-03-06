@@ -20,6 +20,43 @@ The first event can be booked.  The second can't because time 15 is already book
 The third event can be booked, as the first event takes every time less than 20, but not including 20.
 Follow up: How to optimise the time complexity?
 # TODO: Implement the binary approach
+
+
+Approach:
+Current solution is O(n) per booking (linear scan).
+The optimised approach is a sorted list + binary search.
+Use bisect to find where the new interval would sit among existing start times,
+then only check its immediate neighbours for overlap.
+
+import bisect
+self.starts = []
+self.ends = []
+
+def book(start, end):
+    idx = bisect.bisect_left(self.starts, start)
+    # check right neighbour: does new interval overlap next booking?
+    if idx < len(self.starts) and end > self.starts[idx]:
+        return False
+    # check left neighbour: does previous booking overlap new interval?
+    if idx > 0 and self.ends[idx - 1] > start:
+        return False
+    self.starts.insert(idx, start)
+    self.ends.insert(idx, end)
+    return True
+
+Time: O(n) per booking (insert into list is O(n) shift) → O(log n) with balanced BST
+Space: O(n)
+
+Triggers:
+- online booking — each event arrives one at a time
+- overlap check on insertion
+- "can I add this interval without conflict"
+
+Variants / Watch-outs:
+- Optimisation angle: current O(n²) total — the TODO in the file is the real interview question:
+  binary search reduces per-booking check to O(log n); fully optimal is a balanced BST (SortedList from sortedcontainers)
+- My Calendar II: track overlaps list separately; new booking fails only if it hits the
+  overlaps list (triple booking), not the main calendar
 """
 
 

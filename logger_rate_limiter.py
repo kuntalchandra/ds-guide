@@ -20,6 +20,34 @@ Input
 [[], [1, "foo"], [2, "bar"], [3, "foo"], [8, "bar"], [10, "foo"], [11, "foo"]]
 Output
 [null, true, true, false, false, false, true]
+
+
+Approach:
+HashMap message → last_printed_timestamp. On shouldPrint: check if
+current_timestamp >= last_timestamp + 10. If yes, update and return True.
+
+self.log_map = {}
+
+def should_print_message(timestamp, message):
+    if message in self.log_map and timestamp < self.log_map[message] + 10:
+        return False
+    self.log_map[message] = timestamp
+    return True
+
+Time: O(1) per call
+Space: O(unique messages) — unbounded, grows forever
+
+Triggers:
+- rate limiting per key
+- "same message can't appear within window W"
+- deduplicate streams with time-based expiry
+
+Variants / Watch-outs:
+- Optimisation angle: the map grows unbounded — in production you'd use a sliding window
+  with a deque per message (or TTL-based expiry) to bound memory
+- Extended: throttling per user per second (see throttling_limit.py) — same pattern
+  but with a counter + time window reset
+- Bucket queue: for very high throughput, use circular buffer of size 10 (timestamp % 10)
 """
 
 
